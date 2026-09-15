@@ -9,6 +9,7 @@ import roomRouter from "./routes/roomRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import clerkWebhooks from "./controllers/clerkWebhooks.js";
 import connectCloudinary from "./configs/cloudinary.js";
+import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 
 connectDB();
 connectCloudinary();
@@ -16,8 +17,10 @@ connectCloudinary();
 const app = express();
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 
+// Stripe requires the raw request body for signature verification.
+app.post("/api/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
+
 // Middleware to parse JSON
-app.use("/api/clerk", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(clerkMiddleware());
 

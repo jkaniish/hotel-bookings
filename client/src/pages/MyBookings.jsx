@@ -1,12 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
-import { assets, userBookingsDummyData } from '../assets/assets'
+import { assets } from '../assets/assets'
+import toast from 'react-hot-toast'
+import { useAppContext } from '../context/AppContext'
 
 
 
 const MyBookings = () => {
 
-    const [bookings, setBookings]= useState(userBookingsDummyData)
+
+    const { axios, getToken, user } = useAppContext()
+    const [bookings, setBookings] = useState([])
+        
+    const fetchUserBookings = async () => {
+            try {
+                const { data } = await axios.get('/api/bookings/user', { headers: { Authorization: `Bearer ${await getToken()}` } })
+                if (data.success) {
+                    setBookings(data.bookings)
+                }
+                else {
+                    toast.error(data.message)
+                }
+            } catch (error) {
+                toast.error(error.response?.data?.message || error.message)
+            }
+        }
+
+    useEffect(() => {
+        if (user) {
+            fetchUserBookings()
+        }
+    }, [user])
   return (
     <div className='py-28 md:pb-35 md:pt-32 px-4 md:px-16 lg:px-24 xl:px-32'>
         <Title title='My Bookings' subTitle='Easily manage your past, current, and upcoming hotel reservations in one place. Plan your trips seamlessly with just a few clicks' align='left' />
@@ -40,13 +64,13 @@ const MyBookings = () => {
                     <div className='flex flex-row md:items-center md:gap-12 mt-3 gap-8'>
                         <div>
                             <p>Check-In:</p>
-                            <p className='className="text-gray-500 text-sm"'>
+                            <p className='text-gray-500 text-sm'>
                             {new Date(booking.checkInDate).toDateString()}
                             </p>
                         </div>
                         <div>
                             <p>Check-Out:</p>
-                            <p className='className="text-gray-500 text-sm"'>
+                            <p className='text-gray-500 text-sm'>
                             {new Date(booking.checkOutDate).toDateString()}
                             </p>
                         </div>

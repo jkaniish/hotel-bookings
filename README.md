@@ -1,22 +1,37 @@
 # Hotel Bookings
 
-A full-stack hotel booking web application built with React on the frontend and Express + MongoDB on the backend. The app supports hotel browsing, room booking, user authentication, hotel owner workflows, and payment handling.
+A full-stack hotel booking platform for travelers and hotel owners. Guests can browse available rooms, view details, and complete bookings, while property owners can manage listings, room inventory, and booking data through a dedicated dashboard.
+
+## Overview
+
+Hotel Bookings is built as a split-stack application:
+
+- Frontend: React + Vite + Tailwind CSS
+- Backend: Node.js + Express
+- Database: MongoDB with Mongoose
+- Authentication: Clerk
+- Payments: Stripe
+- Media storage: Cloudinary
+- Email notifications: Nodemailer
+
+The app includes a public customer-facing experience and a hotel-owner management area, making it a practical booking and property management solution.
 
 ## Features
 
-- Browse available hotels and rooms
-- View room details and amenities
-- Book rooms for selected dates
-- User authentication and account management via Clerk
-- Hotel owner dashboard to add and manage rooms
-- Image uploads via Cloudinary
-- Email notifications through Nodemailer
-- Secure payments through Stripe
-- Responsive UI built with React + Vite + Tailwind CSS
+- Search and browse hotel listings and available rooms
+- View detailed room information with pricing and amenities
+- Book rooms for a selected date range
+- Track personal bookings in a user dashboard
+- Secure authentication and user management via Clerk
+- Hotel owner dashboard to manage property data and rooms
+- Add room listings with image uploads through Cloudinary
+- Receive booking-related email notifications
+- Accept payments using Stripe integration
+- Responsive UI for desktop and mobile screens
 
 ## Tech Stack
 
-Frontend
+### Frontend
 - React 19
 - Vite
 - React Router
@@ -24,14 +39,15 @@ Frontend
 - Axios
 - React Hot Toast
 
-Backend
+### Backend
 - Node.js
 - Express 5
 - MongoDB + Mongoose
-- Clerk auth and webhooks
-- Cloudinary
+- Clerk Auth / Webhooks
 - Stripe
+- Cloudinary
 - Nodemailer
+- CORS + dotenv
 
 ## Project Structure
 
@@ -58,20 +74,37 @@ hotel-bookings/
 │   ├── server.js
 │   └── vercel.json
 ├── .gitignore
-└── README.md
+├── README.md
+└── package-lock.json
 ```
 
-## Getting Started
+## Core App Flow
 
-### Prerequisites
+### Customer experience
+- Home page with hotel/room discovery
+- Room detail page for availability and pricing
+- Booking flow for selected rooms/dates
+- My Bookings tab to review past/current reservations
 
-- Node.js 18+
-- npm or yarn
-- MongoDB Atlas or local MongoDB instance
-- Clerk account and project keys
+### Hotel owner experience
+- Secure owner route at `/owner`
+- Dashboard overview
+- Add-room form
+- List/manage existing rooms
+
+## Prerequisites
+
+Before running the project locally, make sure you have:
+
+- Node.js 18 or later
+- npm
+- MongoDB Atlas account or a local MongoDB instance
+- Clerk account and API keys
 - Cloudinary account
 - Stripe account
-- SMTP provider (Brevo/Sendinblue or similar)
+- SMTP/email provider for notifications
+
+## Installation
 
 ### 1. Clone the repository
 
@@ -80,36 +113,32 @@ git clone https://github.com/jkaniish/hotel-bookings.git
 cd hotel-bookings
 ```
 
-### 2. Install dependencies
-
-Frontend:
+### 2. Install frontend dependencies
 
 ```bash
 cd client
 npm install
 ```
 
-Backend:
+### 3. Install backend dependencies
 
 ```bash
 cd ../server
 npm install
 ```
 
-### 3. Configure environment variables
+## Environment Variables
 
-Create `.env` files in both `client` and `server` based on the required keys used by the app.
-
-Example for `server/.env`:
+Create an environment file in the `server` directory named `.env` with the values needed by the app:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
 CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
 CLERK_WEBHOOK_SECRET=your_clerk_webhook_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 SMTP_EMAIL=your_email
 SMTP_USER=your_smtp_user
 SMTP_PASS=your_smtp_password
@@ -118,40 +147,44 @@ STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 ```
 
-Example for `client/.env`:
+The frontend also uses a client-side environment file for Vite-based config:
 
 ```env
 VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 VITE_API_URL=http://localhost:3000
 ```
 
-### 4. Run the app
+## Running the Project
 
-Start the backend:
+### Start the backend
 
 ```bash
 cd server
 npm run start
 ```
 
-Or with auto-reload:
+Or use nodemon during development:
 
 ```bash
 npm run server
 ```
 
-Start the frontend:
+### Start the frontend
 
 ```bash
 cd client
 npm run dev
 ```
 
-The frontend will typically run on `http://localhost:5173` and the backend on `http://localhost:3000`.
+The client typically runs at:
+- http://localhost:5173
 
-## API Overview
+The server typically runs at:
+- http://localhost:3000
 
-The backend exposes routes under the following base paths:
+## API Structure
+
+The backend exposes the following route groups:
 
 - `/api/user`
 - `/api/hotels`
@@ -162,7 +195,7 @@ The backend exposes routes under the following base paths:
 
 ## Scripts
 
-Client:
+### Client scripts
 
 ```bash
 npm run dev
@@ -171,37 +204,31 @@ npm run preview
 npm run lint
 ```
 
-Server:
+### Server scripts
 
 ```bash
 npm run start
 npm run server
 ```
 
-## Deployment
+## Deployment Notes
 
-This project includes `vercel.json` configuration for frontend and backend deployment on Vercel.
-
-## Notes
-
-- The app uses Clerk for authentication and webhook synchronization.
-- Stripe webhooks are configured for payment event processing.
-- Cloudinary is used for hotel/room image management.
-- MongoDB stores hotels, rooms, bookings, and user-related data.
+This project includes Vercel configuration files in both the frontend and backend directories, making it suitable for deployment on Vercel with environment variables configured in the deployment dashboard.
 
 ## License
 
-This project does not currently declare a license in the repository, so usage rights are not formally specified. If needed, add a license file before publishing or distributing the project.
+This repository does not currently include a license file. If you plan to publish or distribute the project publicly, consider adding an open-source license such as MIT.
 
-## Contributing
+## Contribution
 
-Contributions are welcome. If you'd like to improve the project:
+Contributions are welcome. If you want to improve the project:
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
-4. Open a pull request
+3. Make your changes
+4. Commit and push your branch
+5. Open a pull request
 
-## Contact
+## Project Owner
 
-If you want to reach the project owner or ask questions about the codebase, use the repository owner details from the GitHub profile associated with this project.
+GitHub: https://github.com/jkaniish
